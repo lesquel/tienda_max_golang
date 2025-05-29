@@ -55,6 +55,11 @@ func main() {
 	// Configurar rutas
 	r := mux.NewRouter()
 
+	// Ruta de Inicio
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Bienvenido a la tiendamax")
+	})
+
 	// Rutas para Sucursales
 	r.HandleFunc("/sucursales", sucursalRepo.GetAllSucursales).Methods("GET")
 	r.HandleFunc("/sucursales/{id}", sucursalRepo.GetSucursal).Methods("GET")
