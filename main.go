@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"restaurante-crud/repositories"
 	"restaurante-crud/tables"
 
@@ -20,6 +21,12 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
 
 	tables.CrearTablaSucursales(db)
 	tables.CrearTablaClientes(db)
@@ -96,6 +103,7 @@ func main() {
 	r.HandleFunc("/producto-promocion", productoPromocionRepo.CreateProductoPromocion).Methods("POST")
 	r.HandleFunc("/producto-promocion/{id}", productoPromocionRepo.DeleteProductoPromocion).Methods("DELETE")
 
-	fmt.Println("Servidor escuchando en el puerto 8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	fmt.Println("Servidor escuchando en el puerto " + port)
+
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
