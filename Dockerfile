@@ -1,5 +1,5 @@
 # Usa una imagen oficial de Go para compilar
-FROM golang:1.20 AS builder
+FROM golang:1.24 AS builder
 
 WORKDIR /app
 
