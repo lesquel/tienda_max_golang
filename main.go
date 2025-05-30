@@ -10,6 +10,7 @@ import (
 	"restaurante-crud/tables"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	_ "modernc.org/sqlite"
 )
 
@@ -108,7 +109,14 @@ func main() {
 	r.HandleFunc("/producto-promocion", productoPromocionRepo.CreateProductoPromocion).Methods("POST")
 	r.HandleFunc("/producto-promocion/{id}", productoPromocionRepo.DeleteProductoPromocion).Methods("DELETE")
 
-	fmt.Println("Servidor escuchando en el puerto " + port)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Content-Type", "Authorization"},
+	})
 
+	handler := c.Handler(r)
+	log.Fatal(http.ListenAndServe(":"+port, handler))
+	fmt.Println("Servidor escuchando en el puerto " + port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
